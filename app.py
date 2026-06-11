@@ -1,5 +1,9 @@
 import streamlit as st
 import pandas as pd
+import os
+
+# --- NOMBRE DEL ARCHIVO DE BASE DE DATOS ---
+ARCHIVO_DATOS = "datos_casilleros.csv"
 
 # 1. CONFIGURACIÓN DE LA PÁGINA Y TEMA OSCURO
 st.set_page_config(
@@ -44,23 +48,29 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 2. INICIALIZAR BASE DE DATOS EN MEMORIA (SIN COLUMNA DE IMAGEN)
+# 2. CARGA O CREACIÓN DE LA BASE DE DATOS PERMANENTE
 if 'df_colaboradores' not in st.session_state:
-    datos_iniciales = []
-    for m in range(1, 9):
-        for c in range(1, 13):
-            datos_iniciales.append({
-                "Modulo": m,
-                "Casillero": c,
-                "Nombre": "Vacío", 
-                "Area": "Sin asignar"
-            })
-    st.session_state.df_colaboradores = pd.DataFrame(datos_iniciales)
+    # Si el archivo ya existe en tu computadora, lo lee y carga los datos
+    if os.path.exists(ARCHIVO_DATOS):
+        st.session_state.df_colaboradores = pd.read_csv(ARCHIVO_DATOS)
+    else:
+        # Si no existe (es la primera vez), crea los casilleros vacíos y genera el archivo
+        datos_iniciales = []
+        for m in range(1, 9):
+            for c in range(1, 13):
+                datos_iniciales.append({
+                    "Modulo": m,
+                    "Casillero": c,
+                    "Nombre": "Vacío", 
+                    "Area": "Sin asignar"
+                })
+        st.session_state.df_colaboradores = pd.DataFrame(datos_iniciales)
+        st.session_state.df_colaboradores.to_csv(ARCHIVO_DATOS, index=False)
 
 if 'seleccion' not in st.session_state:
     st.session_state.seleccion = None
 
-# --- NUEVA LISTA DE ÁREAS METRO EMANCIPACIÓN ---
+# --- LISTA DE ÁREAS METRO EMANCIPACIÓN ---
 lista_areas = [
     "Abarrotes", "Bazar", "Electro", "Frutas y verduras", 
     "Embutidos", "Carnes", "Pollo brasa", "Confiteria", 
@@ -72,16 +82,14 @@ with st.sidebar:
     st.markdown('<h2 style="color:#FFD200;">⚙️ Administrar Casilleros</h2>', unsafe_allow_html=True)
     st.write("Agrega o edita la información de un colaborador aquí:")
     
-    # Formularios de entrada
     mod_edit = st.selectbox("Módulo:", options=list(range(1, 9)))
     cas_edit = st.selectbox("Casillero:", options=list(range(1, 13)))
     
     nuevo_nombre = st.text_input("Nombre del Colaborador:")
-    # Incorporamos las áreas que nos pediste al menú desplegable
     nueva_area = st.selectbox("Área:", lista_areas)
     
     if st.button("Guardar Cambios", use_container_width=True):
-        # Actualizar el DataFrame en la memoria
+        # 1. Actualiza el dato en la memoria
         idx = st.session_state.df_colaboradores[
             (st.session_state.df_colaboradores['Modulo'] == mod_edit) & 
             (st.session_state.df_colaboradores['Casillero'] == cas_edit)
@@ -90,7 +98,10 @@ with st.sidebar:
         st.session_state.df_colaboradores.loc[idx, 'Nombre'] = nuevo_nombre
         st.session_state.df_colaboradores.loc[idx, 'Area'] = nueva_area
         
-        st.success(f"¡Casillero {cas_edit} del Módulo {mod_edit} actualizado!")
+        # 2. GUARDA AUTOMÁTICAMENTE EN EL ARCHIVO CSV FÍSICO
+        st.session_state.df_colaboradores.to_csv(ARCHIVO_DATOS, index=False)
+        
+        st.success(f"¡Casillero {cas_edit} del Módulo {mod_edit} actualizado y guardado!")
 
 # --- INTERFAZ PRINCIPAL ---
 st.markdown('<h1 class="metro-title">Tienda Metro Emancipación<br>Gestión de Casilleros</h1>', unsafe_allow_html=True)
@@ -123,7 +134,7 @@ for i, tab in enumerate(tabs):
 
 st.divider()
 
-# --- MOSTRAR LA INFORMACIÓN DEL CASILLERO SELECCIONADO (SIN IMAGEN) ---
+# --- MOSTRAR LA INFORMACIÓN DEL CASILLERO SELECCIONADO ---
 if st.session_state.seleccion:
     mod = st.session_state.seleccion["modulo"]
     casillero = st.session_state.seleccion["casillero"]
@@ -138,7 +149,6 @@ if st.session_state.seleccion:
     
     estado = "Ocupado" if datos_cas["Nombre"] != "Vacío" else "Disponible"
     
-    # Renderizamos únicamente la tarjeta de información a lo ancho
     st.markdown(f"""
     <div class="info-card">
         <p class="info-name">{datos_cas["Nombre"]}</p>
