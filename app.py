@@ -59,6 +59,12 @@ if 'df_colaboradores' not in st.session_state:
             encoding='utf-8-sig'
         )
 
+        st.write("COLUMNAS:")
+        st.write(st.session_state.df_colaboradores.columns.tolist())
+        
+        st.write("PRIMERAS FILAS:")
+        st.dataframe(st.session_state.df_colaboradores.head())
+
         # Limpiar nombres de columnas
         st.session_state.df_colaboradores.columns = (
             st.session_state.df_colaboradores.columns
@@ -140,7 +146,9 @@ for i, tab in enumerate(tabs):
             cols = st.columns(columnas)
             for col_idx in range(columnas):
                 num_casillero = (fila * columnas) + col_idx + 1
-                
+
+                st.write("DEBUG COLUMNAS:")
+                st.write(st.session_state.df_colaboradores.columns.tolist())
                 # Buscar estado actual para pintar diferente si está ocupado
                 ocupado = st.session_state.df_colaboradores[
                     (st.session_state.df_colaboradores['Modulo'] == num_modulo) & 
