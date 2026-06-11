@@ -47,7 +47,7 @@ st.markdown("""
     }
 
     /* --- NUEVA REGLA PARA CELULARES --- */
-    @media (max-width: 768px) {
+    @media (max-width: 400px) {
         div[data-testid="stHorizontalBlock"] {
             flex-direction: row !important;
             flex-wrap: nowrap !important;
