@@ -46,6 +46,34 @@ st.markdown("""
         font-size: 1.5em;
     }
 
+    .casilleros-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+    }
+    
+    .casillero {
+        background-color: #262730;
+        color: white;
+        text-align: center;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+    
+    /* Mantener 3 columnas incluso en celular */
+    @media (max-width: 640px) {
+        .casilleros-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 4px;
+        }
+    
+        .casillero {
+            font-size: 12px;
+            padding: 8px;
+        }
+    }
     
     </style>
 """, unsafe_allow_html=True)
