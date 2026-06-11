@@ -15,7 +15,6 @@ st.set_page_config(
 # CSS para Modo Oscuro y Colores Metro
 st.markdown("""
     <style>
-    .stApp { background-color: #121212; color: #E0E0E0; }
     
     .metro-title {
         background-color: #1E1E1E; 
@@ -45,29 +44,7 @@ st.markdown("""
         font-weight: bold;
         font-size: 1.5em;
     }
-
-    /* Mantener las 3 columnas en móvil */
-    @media (max-width: 640px) {
     
-        div[data-testid="stHorizontalBlock"]{
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            gap: 0.2rem !important;
-        }
-    
-        div[data-testid="column"]{
-            min-width: 0 !important;
-            flex: 1 1 0 !important;
-            padding: 0 2px !important;
-        }
-    
-        div.stButton > button{
-            height: 55px !important;
-            font-size: 11px !important;
-            padding: 0 !important;
-            white-space: normal !important;
-        }
-    }
     </style>
 """, unsafe_allow_html=True)
 
