@@ -7,7 +7,7 @@ ARCHIVO_DATOS = "datos_casilleros.csv"
 
 # 1. CONFIGURACIÓN DE LA PÁGINA Y TEMA OSCURO 
 st.set_page_config(
-    page_title="Casilleros Metro Emancipación",
+    page_title="Casilleros de Hombre Metro Emancipación",
     page_icon="🛒",
     layout="wide" 
 )
