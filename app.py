@@ -46,30 +46,12 @@ st.markdown("""
         font-size: 1.5em;
     }
 
-    /* --- NUEVA REGLA PARA CELULARES --- */
-    @media (max-width: 768px) {
-    /* 1. Forzar al contenedor de botones a ocupar todo el ancho sin márgenes */
-    div[data-testid="stHorizontalBlock"] {
-        width: 100% !important;
-        gap: 2px !important;
-        margin: 0 !important;
-        padding: 0 !important;
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+        gap: 10px;
+        margin-bottom: 20px;
     }
-    
-    /* 2. Asegurar que las columnas sean pequeñas y no se desborden */
-    div[data-testid="column"] {
-        flex: 1 1 30% !important; /* Ligeramente menos de 33% para evitar desborde */
-        max-width: 33% !important;
-        padding: 1px !important;
-    }
-
-    /* 3. Ajustar botones para que no tengan padding excesivo */
-    div[data-testid="column"] button {
-        width: 100% !important;
-        padding: 5px 0 !important; /* Padding vertical ajustado */
-        font-size: 14px !important;
-    }
-}
     
     </style>
 """, unsafe_allow_html=True)
@@ -178,23 +160,27 @@ tabs = st.tabs(nombres_modulos)
 for i, tab in enumerate(tabs):
     num_modulo = i + 1
     with tab:
-        filas, columnas = 4, 3
-        for fila in range(filas):
-            cols = st.columns(columnas)
-            for col_idx in range(columnas):
-                num_casillero = (fila * columnas) + col_idx + 1
-
-                # Buscar estado actual para pintar diferente si está ocupado
-                ocupado = st.session_state.df_colaboradores[
-                    (st.session_state.df_colaboradores['Modulo'] == num_modulo) & 
-                    (st.session_state.df_colaboradores['Casillero'] == num_casillero)
-                ].iloc[0]['Nombre'] != "Vacío"
-                
-                label = f"{num_casillero}" + (" 👤" if ocupado else "")
-                
-                with cols[col_idx]:
-                    if st.button(label, key=f"btn_m{num_modulo}_c{num_casillero}", use_container_width=True):
-                        st.session_state.seleccion = {"modulo": num_modulo, "casillero": num_casillero}
+        # AQUÍ ESTÁ EL CAMBIO: Abrimos el contenedor CSS
+        st.markdown('<div class="grid-container">', unsafe_allow_html=True)
+        
+        # Filtramos los datos para este módulo
+        df_mod = st.session_state.df_colaboradores[
+            st.session_state.df_colaboradores['Modulo'] == num_modulo
+        ]
+        
+        # Generamos los 12 botones directamente dentro del grid
+        for num_casillero in range(1, 13):
+            # Obtenemos el nombre para saber si está ocupado
+            info = df_mod[df_mod['Casillero'] == num_casillero].iloc[0]
+            ocupado = info['Nombre'] != "Vacío"
+            
+            label = f"{num_casillero}" + (" 👤" if ocupado else "")
+            
+            if st.button(label, key=f"btn_m{num_modulo}_c{num_casillero}", use_container_width=True):
+                st.session_state.seleccion = {"modulo": num_modulo, "casillero": num_casillero}
+        
+        # Cerramos el contenedor CSS
+        st.markdown('</div>', unsafe_allow_html=True)
 
 st.divider()
 
