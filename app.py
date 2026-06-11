@@ -47,16 +47,19 @@ st.markdown("""
     }
 
     /* --- NUEVA REGLA PARA CELULARES --- */
+    /* --- PANTALLAS GRANDES (PC mayores a 640px) --- */
     @media (min-width: 641px) {
-        /* Inyecta la palabra "Casillero " solo a los botones dentro de las pestañas */
-        div[data-testid="stTabs"] button p::before {
+        /* Agrega la palabra "Casillero " EXCLUSIVAMENTE a los botones de la cuadrícula.
+           Tus pestañas de "Módulo 1", "Módulo 2" quedarán intactas. */
+        div[data-testid="column"] button p::before {
             content: "Casillero ";
         }
     }
 
-    /* --- PANTALLAS MÓVILES (Hasta 640px) --- */
+    /* --- PANTALLAS MÓVILES (De 1px a 640px) --- */
     @media (max-width: 640px) {
-        /* Mantiene la cuadrícula de 3 columnas forzada */
+        /* En celulares, simplemente no agregamos el texto, por lo que solo se verá el número. 
+           Mantenemos la cuadrícula forzada de 4x3. */
         div[data-testid="stHorizontalBlock"] {
             flex-direction: row !important;
             flex-wrap: nowrap !important;
@@ -67,8 +70,8 @@ st.markdown("""
             flex: 1 1 0 !important;
             min-width: 0 !important;
         }
-        /* Aquí NO inyectamos la palabra "Casillero", por lo que solo se verá el número */
     }
+    
     </style>
 """, unsafe_allow_html=True)
 
@@ -188,7 +191,7 @@ for i, tab in enumerate(tabs):
                     (st.session_state.df_colaboradores['Casillero'] == num_casillero)
                 ].iloc[0]['Nombre'] != "Vacío"
                 
-                label = f"Casillero {num_casillero}" + (" 👤" if ocupado else "")
+                label = f"{num_casillero}" + (" 👤" if ocupado else "")
                 
                 with cols[col_idx]:
                     if st.button(label, key=f"btn_m{num_modulo}_c{num_casillero}", use_container_width=True):
