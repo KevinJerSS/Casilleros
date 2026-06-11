@@ -52,23 +52,41 @@ st.markdown("""
 if 'df_colaboradores' not in st.session_state:
     # Si el archivo ya existe en tu computadora, lo lee y carga los datos
     if os.path.exists(ARCHIVO_DATOS):
-        # encoding='utf-8-sig' elimina caracteres invisibles automáticamente
-        st.session_state.df_colaboradores = pd.read_csv(ARCHIVO_DATOS, index=False)
-        st.session_state.df_colaboradores.columns = st.session_state.df_colaboradores.columns.str.strip()
+        # Leer CSV con punto y coma
+        st.session_state.df_colaboradores = pd.read_csv(
+            ARCHIVO_DATOS,
+            sep=';',
+            encoding='utf-8-sig'
+        )
+
+        # Limpiar nombres de columnas
+        st.session_state.df_colaboradores.columns = (
+            st.session_state.df_colaboradores.columns
+            .str.strip()
+        )
         
     else:
-        # Si no existe (es la primera vez), crea los casilleros vacíos y genera el archivo
+        # Crear casilleros vacíos la primera vez
         datos_iniciales = []
+
         for m in range(1, 9):
             for c in range(1, 13):
                 datos_iniciales.append({
                     "Modulo": m,
                     "Casillero": c,
-                    "Nombre": "Vacío", 
+                    "Nombre": "Vacío",
                     "Area": "Sin asignar"
                 })
+
         st.session_state.df_colaboradores = pd.DataFrame(datos_iniciales)
-        st.session_state.df_colaboradores.to_csv(ARCHIVO_DATOS, index=False)
+
+        # Guardar CSV inicial
+        st.session_state.df_colaboradores.to_csv(
+            ARCHIVO_DATOS,
+            sep=';',
+            index=False,
+            encoding='utf-8-sig'
+        )
 
 if 'seleccion' not in st.session_state:
     st.session_state.seleccion = None
