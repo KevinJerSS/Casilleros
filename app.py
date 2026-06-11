@@ -5,7 +5,7 @@ import os
 # --- NOMBRE DEL ARCHIVO DE BASE DE DATOS ---
 ARCHIVO_DATOS = "datos_casilleros.csv"
 
-# 1. CONFIGURACIÓN DE LA PÁGINA Y TEMA OSCURO
+# 1. CONFIGURACIÓN DE LA PÁGINA Y TEMA OSCURO 
 st.set_page_config(
     page_title="Casilleros Metro Emancipación",
     page_icon="🛒",
