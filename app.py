@@ -47,16 +47,15 @@ st.markdown("""
     }
 
     /* --- NUEVA REGLA PARA CELULARES --- */
+  /* --- PANTALLAS GRANDES (Mayores a 768px) --- */
     @media (min-width: 769px) {
-        /* Agrega la palabra "Casillero " solo a los botones de la cuadrícula */
         div[data-testid="column"] button p::before {
             content: "Casillero ";
         }
     }
 
-    /* --- PANTALLAS MÓVILES (Hasta 768px) --- */
+    /* --- PANTALLAS MÓVILES Y TABLETS (Hasta 768px) --- */
     @media (max-width: 768px) {
-        /* Mantiene la cuadrícula de 3 columnas forzada */
         div[data-testid="stHorizontalBlock"] {
             flex-direction: row !important;
             flex-wrap: nowrap !important;
