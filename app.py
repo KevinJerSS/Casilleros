@@ -1,93 +1,147 @@
 import streamlit as st
+import pandas as pd
 
-# Configuración inicial de la página
+# 1. CONFIGURACIÓN DE LA PÁGINA Y TEMA OSCURO
 st.set_page_config(
     page_title="Casilleros Metro Emancipación",
     page_icon="🛒",
-    layout="centered"
+    layout="wide" # Cambiado a 'wide' para dar espacio a la barra lateral
 )
 
-# Inyección de CSS para los colores reales de Metro Cencosud (Amarillo y Rojo)
+# CSS para Modo Oscuro y Colores Metro
 st.markdown("""
     <style>
+    .stApp { background-color: #121212; color: #E0E0E0; }
+    
     .metro-title {
-        background-color: #FFD200; /* Amarillo Metro */
-        color: #E2001A; /* Rojo Metro */
+        background-color: #1E1E1E; 
+        color: #FFD200; 
         padding: 20px;
         border-radius: 10px;
         text-align: center;
         font-family: 'Arial', sans-serif;
         font-weight: 900;
         margin-bottom: 25px;
-        border: 2px solid #E2001A;
+        border: 2px solid #E2001A; 
+        box-shadow: 0px 4px 10px rgba(226, 0, 26, 0.2);
     }
+    
     .info-card {
-        background-color: #f4f4f4;
+        background-color: #1E1E1E;
+        color: #FFFFFF;
         padding: 20px;
         border-radius: 8px;
-        border-left: 5px solid #E2001A; /* Detalle en Rojo Metro */
+        border-left: 5px solid #E2001A; 
+        box-shadow: 0px 4px 6px rgba(0,0,0,0.5);
+    }
+    
+    .info-name {
+        color: #E2001A; 
+        margin-top: 0;
+        font-weight: bold;
+        font-size: 1.5em;
     }
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<h1 class="metro-title">Tienda Metro Emancipación<br>Gestión de Casilleros</h1>', unsafe_allow_html=True)
+# 2. INICIALIZAR BASE DE DATOS EN MEMORIA
+if 'df_colaboradores' not in st.session_state:
+    datos_iniciales = []
+    for m in range(1, 9):
+        for c in range(1, 13):
+            datos_iniciales.append({
+                "Modulo": m,
+                "Casillero": c,
+                "Nombre": "Vacío", 
+                "Area": "Sin asignar", 
+                "Imagen": "https://via.placeholder.com/150/333333/FFFFFF?text=Vacio"
+            })
+    st.session_state.df_colaboradores = pd.DataFrame(datos_iniciales)
 
 if 'seleccion' not in st.session_state:
     st.session_state.seleccion = None
 
-def obtener_datos_colaborador(modulo, casillero):
-    areas = ["Cajas", "Frescos", "Abarrotes", "Prevención", "Almacén", "Electro", "Carnes", "Bazar"]
-    area_asignada = areas[(modulo + casillero) % len(areas)]
+# --- PANEL DE ADMINISTRACIÓN (BARRA LATERAL) ---
+with st.sidebar:
+    st.markdown('<h2 style="color:#FFD200;">⚙️ Administrar Casilleros</h2>', unsafe_allow_html=True)
+    st.write("Agrega o edita la información de un colaborador aquí:")
     
-    return {
-        "nombre": f"Colaborador M{modulo}-C{casillero}",
-        "area": area_asignada,
-        # Se actualizó el color del placeholder a rojo para que combine
-        "imagen": f"https://via.placeholder.com/150/E2001A/FFFFFF?text=M{modulo}-C{casillero}"
-    }
+    # Formularios de entrada
+    mod_edit = st.selectbox("Módulo:", options=list(range(1, 9)))
+    cas_edit = st.selectbox("Casillero:", options=list(range(1, 13)))
+    
+    nuevo_nombre = st.text_input("Nombre del Colaborador:")
+    nueva_area = st.selectbox("Área:", ["Cajas", "Frescos", "Abarrotes", "Prevención", "Almacén", "Electro", "Carnes", "Bazar", "Sin asignar"])
+    nueva_foto = st.text_input("URL de la Foto (Opcional):", value=f"https://via.placeholder.com/150/E2001A/FFFFFF?text={mod_edit}-{cas_edit}")
+    
+    if st.button("Guardar Cambios", use_container_width=True):
+        # Actualizar el DataFrame en la memoria
+        idx = st.session_state.df_colaboradores[
+            (st.session_state.df_colaboradores['Modulo'] == mod_edit) & 
+            (st.session_state.df_colaboradores['Casillero'] == cas_edit)
+        ].index
+        
+        st.session_state.df_colaboradores.loc[idx, 'Nombre'] = nuevo_nombre
+        st.session_state.df_colaboradores.loc[idx, 'Area'] = nueva_area
+        st.session_state.df_colaboradores.loc[idx, 'Imagen'] = nueva_foto
+        
+        st.success(f"¡Casillero {cas_edit} del Módulo {mod_edit} actualizado!")
 
+# --- INTERFAZ PRINCIPAL ---
+st.markdown('<h1 class="metro-title">Tienda Metro Emancipación<br>Gestión de Casilleros</h1>', unsafe_allow_html=True)
 st.write("### Navega por los módulos y selecciona un casillero:")
 
+# Creación de pestañas para los 8 Módulos
 nombres_modulos = [f"Módulo {i}" for i in range(1, 9)]
 tabs = st.tabs(nombres_modulos)
 
 for i, tab in enumerate(tabs):
     num_modulo = i + 1
     with tab:
-        # Cuadrícula: 4 filas x 3 columnas
-        filas = 4
-        columnas = 3
-        
+        filas, columnas = 4, 3
         for fila in range(filas):
             cols = st.columns(columnas)
             for col_idx in range(columnas):
                 num_casillero = (fila * columnas) + col_idx + 1
                 
+                # Buscar estado actual para pintar diferente si está ocupado (opcional)
+                ocupado = st.session_state.df_colaboradores[
+                    (st.session_state.df_colaboradores['Modulo'] == num_modulo) & 
+                    (st.session_state.df_colaboradores['Casillero'] == num_casillero)
+                ].iloc[0]['Nombre'] != "Vacío"
+                
+                label = f"Casillero {num_casillero}" + (" 👤" if ocupado else "")
+                
                 with cols[col_idx]:
-                    if st.button(f"Casillero {num_casillero}", key=f"btn_m{num_modulo}_c{num_casillero}", use_container_width=True):
+                    if st.button(label, key=f"btn_m{num_modulo}_c{num_casillero}", use_container_width=True):
                         st.session_state.seleccion = {"modulo": num_modulo, "casillero": num_casillero}
 
 st.divider()
 
+# MOSTRAR LA INFORMACIÓN DEL CASILLERO SELECCIONADO
 if st.session_state.seleccion:
     mod = st.session_state.seleccion["modulo"]
     casillero = st.session_state.seleccion["casillero"]
     
-    colaborador = obtener_datos_colaborador(mod, casillero)
+    # Extraer datos actualizados
+    datos_cas = st.session_state.df_colaboradores[
+        (st.session_state.df_colaboradores['Modulo'] == mod) & 
+        (st.session_state.df_colaboradores['Casillero'] == casillero)
+    ].iloc[0]
     
     st.subheader(f"Información: Módulo {mod} - Casillero {casillero}")
-    
-    col_img, col_info = st.columns([1, 2])
+    col_img, col_info = st.columns([1, 3])
     
     with col_img:
-        st.image(colaborador["imagen"], width=150)
+        st.image(datos_cas["Imagen"], width=150)
         
     with col_info:
+        estado = "Ocupado" if datos_cas["Nombre"] != "Vacío" else "Disponible"
         st.markdown(f"""
         <div class="info-card">
-            <h3 style="color:#E2001A; margin-top:0;">{colaborador["nombre"]}</h3>
-            <p><strong>Área asignada:</strong> {colaborador["area"]}</p>
-            <p><strong>Estado:</strong> Ocupado</p>
+            <p class="info-name">{datos_cas["Nombre"]}</p>
+            <p><strong>Área asignada:</strong> {datos_cas["Area"]}</p>
+            <p><strong>Estado:</strong> {estado}</p>
         </div>
         """, unsafe_allow_html=True)
 else:
