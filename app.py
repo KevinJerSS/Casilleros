@@ -46,12 +46,6 @@ st.markdown("""
         font-size: 1.5em;
     }
 
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr); /* 3 columnas */
-        gap: 10px;
-        margin-bottom: 20px;
-    }
     
     </style>
 """, unsafe_allow_html=True)
@@ -157,31 +151,28 @@ st.write("### Navega por los módulos y selecciona un casillero:")
 nombres_modulos = [f"Módulo {i}" for i in range(1, 9)]
 tabs = st.tabs(nombres_modulos)
 
-for i, tab in enumerate(tabs):
-    num_modulo = i + 1
-    with tab:
-        # AQUÍ ESTÁ EL CAMBIO: Abrimos el contenedor CSS
-        st.markdown('<div class="grid-container">', unsafe_allow_html=True)
-        
-        # Filtramos los datos para este módulo
-        df_mod = st.session_state.df_colaboradores[
-            st.session_state.df_colaboradores['Modulo'] == num_modulo
-        ]
-        
-        # Generamos los 12 botones directamente dentro del grid
-        for num_casillero in range(1, 13):
-            # Obtenemos el nombre para saber si está ocupado
-            info = df_mod[df_mod['Casillero'] == num_casillero].iloc[0]
-            ocupado = info['Nombre'] != "Vacío"
-            
-            label = f"{num_casillero}" + (" 👤" if ocupado else "")
-            
-            if st.button(label, key=f"btn_m{num_modulo}_c{num_casillero}", use_container_width=True):
-                st.session_state.seleccion = {"modulo": num_modulo, "casillero": num_casillero}
-        
-        # Cerramos el contenedor CSS
-        st.markdown('</div>', unsafe_allow_html=True)
+for fila in range(4):
+    cols = st.columns(3)
 
+    for col in range(3):
+        num_casillero = fila * 3 + col + 1
+
+        info = df_mod[df_mod['Casillero'] == num_casillero].iloc[0]
+        ocupado = info['Nombre'] != "Vacío"
+
+        label = f"{num_casillero}" + (" 👤" if ocupado else "")
+
+        with cols[col]:
+            if st.button(
+                label,
+                key=f"btn_m{num_modulo}_c{num_casillero}",
+                use_container_width=True
+            ):
+                st.session_state.seleccion = {
+                    "modulo": num_modulo,
+                    "casillero": num_casillero
+                }
+                
 st.divider()
 
 # --- MOSTRAR LA INFORMACIÓN DEL CASILLERO SELECCIONADO ---
