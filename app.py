@@ -147,8 +147,6 @@ for i, tab in enumerate(tabs):
             for col_idx in range(columnas):
                 num_casillero = (fila * columnas) + col_idx + 1
 
-                st.write("DEBUG COLUMNAS:")
-                st.write(st.session_state.df_colaboradores.columns.tolist())
                 # Buscar estado actual para pintar diferente si está ocupado
                 ocupado = st.session_state.df_colaboradores[
                     (st.session_state.df_colaboradores['Modulo'] == num_modulo) & 
