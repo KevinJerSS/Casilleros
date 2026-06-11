@@ -55,7 +55,6 @@ if 'df_colaboradores' not in st.session_state:
         # Leer CSV con punto y coma
         st.session_state.df_colaboradores = pd.read_csv(
             ARCHIVO_DATOS,
-            sep=';',
             encoding='utf-8-sig'
         )
 
