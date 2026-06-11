@@ -59,12 +59,6 @@ if 'df_colaboradores' not in st.session_state:
             encoding='utf-8-sig'
         )
 
-        st.write("COLUMNAS:")
-        st.write(st.session_state.df_colaboradores.columns.tolist())
-        
-        st.write("PRIMERAS FILAS:")
-        st.dataframe(st.session_state.df_colaboradores.head())
-
         # Limpiar nombres de columnas
         st.session_state.df_colaboradores.columns = (
             st.session_state.df_colaboradores.columns
