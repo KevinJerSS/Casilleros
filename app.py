@@ -170,8 +170,8 @@ with st.sidebar:
             st.warning(f"¡Vaciado!")
 
 # --- INTERFAZ PRINCIPAL ---
-st.markdown('<h1 class="metro-title">Tienda Metro Emancipación<br>Gestión de Casilleros</h1>', unsafe_allow_html=True)
-st.write("### Navega por los módulos y selecciona un casillero:")
+st.markdown('<h1 class="metro-title">Tienda Metro Emancipación</h1>', unsafe_allow_html=True)
+st.write("### Gestión de Casilleros:")
 
 # Creación de pestañas para los 8 Módulos
 nombres_modulos = [f"Módulo {i}" for i in range(1, 9)]
