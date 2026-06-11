@@ -46,19 +46,17 @@ st.markdown("""
         font-size: 1.5em;
     }
 
-    /* FORZAR CUADRÍCULA 4x3 EN MÓVILES */
+    /* --- NUEVA REGLA PARA CELULARES --- */
     @media (max-width: 768px) {
-        /* Evitar que los bloques horizontales se rompan */
         div[data-testid="stHorizontalBlock"] {
             flex-wrap: nowrap !important;
             flex-direction: row !important;
         }
-        /* Obligar a cada columna a ocupar un tercio de la pantalla */
         div[data-testid="column"] {
             width: 33.33% !important;
             flex: 1 1 33.33% !important;
             min-width: 0 !important;
-            padding: 0 2px !important; /* Reducir el espacio entre botones para que quepan bien */
+            padding: 0 2px !important;
         }
     }
     </style>
