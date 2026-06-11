@@ -47,25 +47,26 @@ st.markdown("""
     }
 
     /* --- NUEVA REGLA PARA CELULARES --- */
-  /* --- PANTALLAS GRANDES (Mayores a 768px) --- */
-    @media (min-width: 769px) {
-        div[data-testid="column"] button p::before {
-            content: "Casillero ";
-        }
+    @media (max-width: 768px) {
+    /* 1. Forzamos al contenedor de botones a no tener margen extra */
+    div[data-testid="stHorizontalBlock"] {
+        gap: 2px !important; /* Espacio mínimo entre botones */
+        padding: 0 !important;
+    }
+    
+    /* 2. Forzamos a cada columna a ser exactamente 1/3 del ancho */
+    div[data-testid="column"] {
+        flex: 1 1 33% !important;
+        max-width: 33% !important;
+        padding: 1px !important; /* Mínimo padding para que no se peguen */
     }
 
-    /* --- PANTALLAS MÓVILES Y TABLETS (Hasta 768px) --- */
-    @media (max-width: 768px) {
-        div[data-testid="stHorizontalBlock"] {
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            gap: 0.5rem !important;
-        }
-        div[data-testid="column"] {
-            width: auto !important;
-            flex: 1 1 0 !important;
-            min-width: 0 !important;
-        }
+    /* 3. Ajustamos el botón para que aproveche todo el espacio */
+    div[data-testid="column"] button {
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        font-size: 12px !important; /* Texto pequeño para que no se desborde */
     }
     
     </style>
