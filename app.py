@@ -48,26 +48,28 @@ st.markdown("""
 
     /* --- NUEVA REGLA PARA CELULARES --- */
     @media (max-width: 768px) {
-    /* 1. Forzamos al contenedor de botones a no tener margen extra */
+    /* 1. Forzar al contenedor de botones a ocupar todo el ancho sin márgenes */
     div[data-testid="stHorizontalBlock"] {
-        gap: 2px !important; /* Espacio mínimo entre botones */
+        width: 100% !important;
+        gap: 2px !important;
+        margin: 0 !important;
         padding: 0 !important;
     }
     
-    /* 2. Forzamos a cada columna a ser exactamente 1/3 del ancho */
+    /* 2. Asegurar que las columnas sean pequeñas y no se desborden */
     div[data-testid="column"] {
-        flex: 1 1 33% !important;
+        flex: 1 1 30% !important; /* Ligeramente menos de 33% para evitar desborde */
         max-width: 33% !important;
-        padding: 1px !important; /* Mínimo padding para que no se peguen */
+        padding: 1px !important;
     }
 
-    /* 3. Ajustamos el botón para que aproveche todo el espacio */
+    /* 3. Ajustar botones para que no tengan padding excesivo */
     div[data-testid="column"] button {
         width: 100% !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        font-size: 12px !important; /* Texto pequeño para que no se desborde */
+        padding: 5px 0 !important; /* Padding vertical ajustado */
+        font-size: 14px !important;
     }
+}
     
     </style>
 """, unsafe_allow_html=True)
