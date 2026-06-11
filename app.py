@@ -52,7 +52,10 @@ st.markdown("""
 if 'df_colaboradores' not in st.session_state:
     # Si el archivo ya existe en tu computadora, lo lee y carga los datos
     if os.path.exists(ARCHIVO_DATOS):
-        st.session_state.df_colaboradores = pd.read_csv(ARCHIVO_DATOS)
+        # encoding='utf-8-sig' elimina caracteres invisibles automáticamente
+        st.session_state.df_colaboradores = pd.read_csv(ARCHIVO_DATOS, encoding='utf-8-sig')
+        # Limpiamos posibles espacios en blanco accidentales en los nombres de las columnas
+        st.session_state.df_colaboradores.columns = st.session_state.df_colaboradores.columns.str.strip()
     else:
         # Si no existe (es la primera vez), crea los casilleros vacíos y genera el archivo
         datos_iniciales = []
