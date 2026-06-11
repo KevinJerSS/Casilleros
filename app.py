@@ -49,14 +49,14 @@ st.markdown("""
     /* --- NUEVA REGLA PARA CELULARES --- */
     @media (max-width: 768px) {
         div[data-testid="stHorizontalBlock"] {
-            flex-wrap: nowrap !important;
             flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 0.5rem !important; /* Espacio pequeño y uniforme entre botones */
         }
         div[data-testid="column"] {
-            width: 33.33% !important;
-            flex: 1 1 33.33% !important;
+            width: auto !important;
+            flex: 1 1 0 !important; /* Reparte el espacio disponible en partes iguales */
             min-width: 0 !important;
-            padding: 0 2px !important;
         }
     }
     </style>
