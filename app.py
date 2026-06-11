@@ -151,27 +151,26 @@ st.write("### Navega por los módulos y selecciona un casillero:")
 nombres_modulos = [f"Módulo {i}" for i in range(1, 9)]
 tabs = st.tabs(nombres_modulos)
 
-for fila in range(4):
-    cols = st.columns(3)
-
-    for col in range(3):
-        num_casillero = fila * 3 + col + 1
-
-        info = df_mod[df_mod['Casillero'] == num_casillero].iloc[0]
-        ocupado = info['Nombre'] != "Vacío"
-
-        label = f"{num_casillero}" + (" 👤" if ocupado else "")
-
-        with cols[col]:
-            if st.button(
-                label,
-                key=f"btn_m{num_modulo}_c{num_casillero}",
-                use_container_width=True
-            ):
-                st.session_state.seleccion = {
-                    "modulo": num_modulo,
-                    "casillero": num_casillero
-                }
+for i, tab in enumerate(tabs):
+    num_modulo = i + 1
+    with tab:
+        filas, columnas = 4, 3
+        for fila in range(filas):
+            cols = st.columns(columnas)
+            for col_idx in range(columnas):
+                num_casillero = (fila * columnas) + col_idx + 1
+                
+                # Buscar estado actual para pintar diferente si está ocupado
+                ocupado = st.session_state.df_colaboradores[
+                    (st.session_state.df_colaboradores['Modulo'] == num_modulo) & 
+                    (st.session_state.df_colaboradores['Casillero'] == num_casillero)
+                ].iloc[0]['Nombre'] != "Vacío"
+                
+                label = f"Casillero {num_casillero}" + (" 👤" if ocupado else "")
+                
+                with cols[col_idx]:
+                    if st.button(label, key=f"btn_m{num_modulo}_c{num_casillero}", use_container_width=True):
+                        st.session_state.seleccion = {"modulo": num_modulo, "casillero": num_casillero}
                 
 st.divider()
 
