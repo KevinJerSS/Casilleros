@@ -5,7 +5,7 @@ import pandas as pd
 st.set_page_config(
     page_title="Casilleros Metro Emancipación",
     page_icon="🛒",
-    layout="wide" # Cambiado a 'wide' para dar espacio a la barra lateral
+    layout="wide" 
 )
 
 # CSS para Modo Oscuro y Colores Metro
@@ -44,7 +44,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 2. INICIALIZAR BASE DE DATOS EN MEMORIA
+# 2. INICIALIZAR BASE DE DATOS EN MEMORIA (SIN COLUMNA DE IMAGEN)
 if 'df_colaboradores' not in st.session_state:
     datos_iniciales = []
     for m in range(1, 9):
@@ -53,8 +53,7 @@ if 'df_colaboradores' not in st.session_state:
                 "Modulo": m,
                 "Casillero": c,
                 "Nombre": "Vacío", 
-                "Area": "Sin asignar", 
-                "Imagen": "https://via.placeholder.com/150/333333/FFFFFF?text=Vacio"
+                "Area": "Sin asignar"
             })
     st.session_state.df_colaboradores = pd.DataFrame(datos_iniciales)
 
@@ -72,7 +71,6 @@ with st.sidebar:
     
     nuevo_nombre = st.text_input("Nombre del Colaborador:")
     nueva_area = st.selectbox("Área:", ["Cajas", "Frescos", "Abarrotes", "Prevención", "Almacén", "Electro", "Carnes", "Bazar", "Sin asignar"])
-    nueva_foto = st.text_input("URL de la Foto (Opcional):", value=f"https://via.placeholder.com/150/E2001A/FFFFFF?text={mod_edit}-{cas_edit}")
     
     if st.button("Guardar Cambios", use_container_width=True):
         # Actualizar el DataFrame en la memoria
@@ -83,7 +81,6 @@ with st.sidebar:
         
         st.session_state.df_colaboradores.loc[idx, 'Nombre'] = nuevo_nombre
         st.session_state.df_colaboradores.loc[idx, 'Area'] = nueva_area
-        st.session_state.df_colaboradores.loc[idx, 'Imagen'] = nueva_foto
         
         st.success(f"¡Casillero {cas_edit} del Módulo {mod_edit} actualizado!")
 
@@ -104,7 +101,7 @@ for i, tab in enumerate(tabs):
             for col_idx in range(columnas):
                 num_casillero = (fila * columnas) + col_idx + 1
                 
-                # Buscar estado actual para pintar diferente si está ocupado (opcional)
+                # Buscar estado actual para pintar diferente si está ocupado
                 ocupado = st.session_state.df_colaboradores[
                     (st.session_state.df_colaboradores['Modulo'] == num_modulo) & 
                     (st.session_state.df_colaboradores['Casillero'] == num_casillero)
@@ -118,7 +115,7 @@ for i, tab in enumerate(tabs):
 
 st.divider()
 
-# MOSTRAR LA INFORMACIÓN DEL CASILLERO SELECCIONADO
+# --- MOSTRAR LA INFORMACIÓN DEL CASILLERO SELECCIONADO (SIN IMAGEN) ---
 if st.session_state.seleccion:
     mod = st.session_state.seleccion["modulo"]
     casillero = st.session_state.seleccion["casillero"]
@@ -130,19 +127,16 @@ if st.session_state.seleccion:
     ].iloc[0]
     
     st.subheader(f"Información: Módulo {mod} - Casillero {casillero}")
-    col_img, col_info = st.columns([1, 3])
     
-    with col_img:
-        st.image(datos_cas["Imagen"], width=150)
-        
-    with col_info:
-        estado = "Ocupado" if datos_cas["Nombre"] != "Vacío" else "Disponible"
-        st.markdown(f"""
-        <div class="info-card">
-            <p class="info-name">{datos_cas["Nombre"]}</p>
-            <p><strong>Área asignada:</strong> {datos_cas["Area"]}</p>
-            <p><strong>Estado:</strong> {estado}</p>
-        </div>
-        """, unsafe_allow_html=True)
+    estado = "Ocupado" if datos_cas["Nombre"] != "Vacío" else "Disponible"
+    
+    # Renderizamos únicamente la tarjeta de información a lo ancho
+    st.markdown(f"""
+    <div class="info-card">
+        <p class="info-name">{datos_cas["Nombre"]}</p>
+        <p><strong>Área asignada:</strong> {datos_cas["Area"]}</p>
+        <p><strong>Estado:</strong> {estado}</p>
+    </div>
+    """, unsafe_allow_html=True)
 else:
     st.info("Selecciona un casillero en la cuadrícula superior.")
