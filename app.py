@@ -60,6 +60,13 @@ if 'df_colaboradores' not in st.session_state:
 if 'seleccion' not in st.session_state:
     st.session_state.seleccion = None
 
+# --- NUEVA LISTA DE ÁREAS METRO EMANCIPACIÓN ---
+lista_areas = [
+    "Abarrotes", "Bazar", "Electro", "Frutas y verduras", 
+    "Embutidos", "Carnes", "Pollo brasa", "Confiteria", 
+    "Cajas", "Promociones", "Panaderia", "Sin asignar"
+]
+
 # --- PANEL DE ADMINISTRACIÓN (BARRA LATERAL) ---
 with st.sidebar:
     st.markdown('<h2 style="color:#FFD200;">⚙️ Administrar Casilleros</h2>', unsafe_allow_html=True)
@@ -70,7 +77,8 @@ with st.sidebar:
     cas_edit = st.selectbox("Casillero:", options=list(range(1, 13)))
     
     nuevo_nombre = st.text_input("Nombre del Colaborador:")
-    nueva_area = st.selectbox("Área:", ["Cajas", "Frescos", "Abarrotes", "Prevención", "Almacén", "Electro", "Carnes", "Bazar", "Sin asignar"])
+    # Incorporamos las áreas que nos pediste al menú desplegable
+    nueva_area = st.selectbox("Área:", lista_areas)
     
     if st.button("Guardar Cambios", use_container_width=True):
         # Actualizar el DataFrame en la memoria
