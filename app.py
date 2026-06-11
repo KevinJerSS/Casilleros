@@ -46,35 +46,28 @@ st.markdown("""
         font-size: 1.5em;
     }
 
-    .casilleros-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    width: 100%;
-    }
-    
-    .casillero {
-        background-color: #262730;
-        color: white;
-        text-align: center;
-        padding: 12px;
-        border-radius: 8px;
-        font-weight: bold;
-    }
-    
-    /* Mantener 3 columnas incluso en celular */
+    /* Mantener las 3 columnas en móvil */
     @media (max-width: 640px) {
-        .casilleros-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 4px;
+    
+        div[data-testid="stHorizontalBlock"]{
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 0.2rem !important;
         }
     
-        .casillero {
-            font-size: 12px;
-            padding: 8px;
+        div[data-testid="column"]{
+            min-width: 0 !important;
+            flex: 1 1 0 !important;
+            padding: 0 2px !important;
+        }
+    
+        div.stButton > button{
+            height: 55px !important;
+            font-size: 11px !important;
+            padding: 0 !important;
+            white-space: normal !important;
         }
     }
-    
     </style>
 """, unsafe_allow_html=True)
 
@@ -194,7 +187,7 @@ for i, tab in enumerate(tabs):
                     (st.session_state.df_colaboradores['Casillero'] == num_casillero)
                 ].iloc[0]['Nombre'] != "Vacío"
                 
-                label = f"Casillero {num_casillero}" + (" 👤" if ocupado else "")
+                label = f"{num_casillero}" + (" 👤" if ocupado else "")
                 
                 with cols[col_idx]:
                     if st.button(label, key=f"btn_m{num_modulo}_c{num_casillero}", use_container_width=True):
