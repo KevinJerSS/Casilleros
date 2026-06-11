@@ -7,7 +7,7 @@ ARCHIVO_DATOS = "datos_casilleros.csv"
 
 # 1. CONFIGURACIÓN DE LA PÁGINA Y TEMA OSCURO 
 st.set_page_config(
-    page_title="Casilleros de Hombre Metro Emancipación",
+    page_title="Casilleros Metro Emancipación",
     page_icon="🛒",
     layout="wide" 
 )
@@ -171,7 +171,7 @@ with st.sidebar:
 
 # --- INTERFAZ PRINCIPAL ---
 st.markdown('<h1 class="metro-title">Tienda Metro Emancipación</h1>', unsafe_allow_html=True)
-st.write("### Gestión de Casilleros:")
+st.write("### Gestión de Casilleros de Hombre:")
 
 # Creación de pestañas para los 8 Módulos
 nombres_modulos = [f"Módulo {i}" for i in range(1, 9)]
