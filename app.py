@@ -16,33 +16,61 @@ st.set_page_config(
 st.markdown("""
     <style>
     
-    .metro-title {
-        background-color: #1E1E1E; 
-        color: #FFD200; 
+    /* Tarjeta de información */
+    .info-card {
+        background-color: var(--background-color);
+        color: var(--text-color);
         padding: 20px;
         border-radius: 10px;
-        text-align: center;
-        font-family: 'Arial', sans-serif;
-        font-weight: 900;
-        margin-bottom: 25px;
-        border: 2px solid #E2001A; 
-        box-shadow: 0px 4px 10px rgba(226, 0, 26, 0.2);
-    }
-    
-    .info-card {
-        background-color: #1E1E1E;
-        color: #FFFFFF;
-        padding: 20px;
-        border-radius: 8px;
-        border-left: 5px solid #E2001A; 
-        box-shadow: 0px 4px 6px rgba(0,0,0,0.5);
+        border-left: 5px solid #E2001A;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
     
     .info-name {
-        color: #E2001A; 
-        margin-top: 0;
+        color: #E2001A;
+        font-size: 1.4rem;
         font-weight: bold;
-        font-size: 1.5em;
+    }
+    
+    /* Título */
+    .metro-title {
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 900;
+        margin-bottom: 20px;
+        border: 2px solid #E2001A;
+    }
+    
+    /* Tema oscuro */
+    [data-theme="dark"] .metro-title {
+        background-color: #1E1E1E;
+        color: #FFD200;
+    }
+    
+    [data-theme="dark"] .info-card {
+        background-color: #1E1E1E;
+        color: white;
+    }
+    
+    /* Tema claro */
+    [data-theme="light"] .metro-title {
+        background-color: #FFF8E1;
+        color: #C62828;
+    }
+    
+    [data-theme="light"] .info-card {
+        background-color: white;
+        color: #222;
+        border: 1px solid #DDD;
+    }
+    
+    /* Botones */
+    div.stButton > button {
+        width: 100%;
+        height: 65px;
+        border-radius: 10px;
+        font-weight: bold;
     }
     
     </style>
