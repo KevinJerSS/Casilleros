@@ -47,27 +47,28 @@ st.markdown("""
     }
 
     /* --- NUEVA REGLA PARA CELULARES --- */
-    @media (max-width: 768px) {
-
-    /* Contenedor de los casilleros */
-    div[data-testid="stHorizontalBlock"]{
-        display: flex !important;
-        flex-wrap: wrap !important;
-        gap: 8px !important;
+    @media (min-width: 641px) {
+        /* Inyecta la palabra "Casillero " solo a los botones dentro de las pestañas */
+        div[data-testid="stTabs"] button p::before {
+            content: "Casillero ";
+        }
     }
 
-    /* Cada columna ocupa 1/3 del ancho */
-    div[data-testid="column"]{
-        flex: 0 0 calc(33.33% - 8px) !important;
-        max-width: calc(33.33% - 8px) !important;
-        min-width: calc(33.33% - 8px) !important;
+    /* --- PANTALLAS MÓVILES (Hasta 640px) --- */
+    @media (max-width: 640px) {
+        /* Mantiene la cuadrícula de 3 columnas forzada */
+        div[data-testid="stHorizontalBlock"] {
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 0.5rem !important;
+        }
+        div[data-testid="column"] {
+            width: auto !important;
+            flex: 1 1 0 !important;
+            min-width: 0 !important;
+        }
+        /* Aquí NO inyectamos la palabra "Casillero", por lo que solo se verá el número */
     }
-
-    /* Botón ocupa todo el ancho de su columna */
-    .stButton button{
-        width: 100% !important;
-    }
-}
     </style>
 """, unsafe_allow_html=True)
 
