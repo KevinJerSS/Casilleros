@@ -48,17 +48,26 @@ st.markdown("""
 
     /* --- NUEVA REGLA PARA CELULARES --- */
     @media (max-width: 768px) {
-        div[data-testid="stHorizontalBlock"] {
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            gap: 0.5rem !important; /* Espacio pequeño y uniforme entre botones */
-        }
-        div[data-testid="column"] {
-            width: auto !important;
-            flex: 1 1 0 !important; /* Reparte el espacio disponible en partes iguales */
-            min-width: 0 !important;
-        }
+
+    /* Contenedor de los casilleros */
+    div[data-testid="stHorizontalBlock"]{
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
     }
+
+    /* Cada columna ocupa 1/3 del ancho */
+    div[data-testid="column"]{
+        flex: 0 0 calc(33.33% - 8px) !important;
+        max-width: calc(33.33% - 8px) !important;
+        min-width: calc(33.33% - 8px) !important;
+    }
+
+    /* Botón ocupa todo el ancho de su columna */
+    .stButton button{
+        width: 100% !important;
+    }
+}
     </style>
 """, unsafe_allow_html=True)
 
