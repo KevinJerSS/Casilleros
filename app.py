@@ -53,7 +53,8 @@ if 'df_colaboradores' not in st.session_state:
     # Si el archivo ya existe en tu computadora, lo lee y carga los datos
     if os.path.exists(ARCHIVO_DATOS):
         # encoding='utf-8-sig' elimina caracteres invisibles automáticamente
-        st.session_state.df_colaboradores = pd.read_csv(ARCHIVO_DATOS, encoding='utf-8-sig')
+        st.session_state.df_colaboradores = pd.read_csv(ARCHIVO_DATOS, encoding='utf-8-sig', sep=';')
+        st.write(st.session_state.df_colaboradores.columns.tolist())
         st.session_state.df_colaboradores.columns = st.session_state.df_colaboradores.columns.str.strip()
         
     else:
