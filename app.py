@@ -130,11 +130,13 @@ with st.sidebar:
     st.markdown('<h2 style="color:#FFD200;">⚙️ Administrar Casilleros</h2>', unsafe_allow_html=True)
     st.write("Agrega o edita la información de un colaborador aquí:")
     
-    mod_edit = st.selectbox("Módulo:", options=list(range(1, 9)))
-    cas_edit = st.selectbox("Casillero:", options=list(range(1, 13)))
+    # Reemplazamos los selectbox por sliders (deslizadores táctiles)
+    mod_edit = st.slider("Módulo:", min_value=1, max_value=8, value=1)
+    cas_edit = st.slider("Casillero:", min_value=1, max_value=12, value=1)
     
     nuevo_nombre = st.text_input("Nombre del Colaborador:")
-    nueva_area = st.selectbox("Área:", lista_areas)
+    # Reemplazamos el selectbox por botones de selección
+    nueva_area = st.radio("Área:", lista_areas)
 
     # Creamos dos columnas para alinear los botones
     col_btn1, col_btn2 = st.columns(2)
