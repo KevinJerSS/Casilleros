@@ -184,7 +184,7 @@ with st.sidebar:
         csv = datos_modulo.to_csv(index=False).encode('utf-8-sig')
         
         st.download_button(
-            label=f"Descargar Módulo {mod_edit}",
+            label=f"Descargar {mod_edit}",
             data=csv,
             file_name=f"Reporte_Modulo_{mod_edit}.csv",
             mime="text/csv",
