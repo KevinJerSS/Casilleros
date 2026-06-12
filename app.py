@@ -196,54 +196,74 @@ with st.sidebar:
 st.markdown('<h1 class="metro-title">Tienda Metro Emancipación</h1>', unsafe_allow_html=True)
 st.write("### Gestión de Casilleros de Hombre:")
 
-# Creación de pestañas para los 8 Módulos
-nombres_modulos = [f"Módulo {i}" for i in range(1, 9)]
-tabs = st.tabs(nombres_modulos)
+# 7. Generación de las Pestañas y los Botones Inteligentes
+modulos_nombres = [f"Módulo {i}" for i in range(1, 9)]
+pestanas = st.tabs(modulos_nombres)
 
-for i, tab in enumerate(tabs):
+for i, tab in enumerate(pestanas):
     num_modulo = i + 1
     with tab:
-        filas, columnas = 4, 3
+        filas = 4
+        columnas = 3
+        
         for fila in range(filas):
             cols = st.columns(columnas)
             for col_idx in range(columnas):
                 num_casillero = (fila * columnas) + col_idx + 1
                 
-                # Buscar estado actual para pintar diferente si está ocupado
-                ocupado = st.session_state.df_colaboradores[
+                # Obtenemos los datos desde Pandas
+                datos_cas = st.session_state.df_colaboradores[
                     (st.session_state.df_colaboradores['Modulo'] == num_modulo) & 
                     (st.session_state.df_colaboradores['Casillero'] == num_casillero)
-                ].iloc[0]['Nombre'] != "Vacío"
+                ].iloc[0]
                 
-                label = f"{num_casillero}" + (" 👤" if ocupado else "")
+                nombre = datos_cas['Nombre']
+                ocupado = nombre != "Vacío"
                 
                 with cols[col_idx]:
-                    if st.button(label, key=f"btn_m{num_modulo}_c{num_casillero}", use_container_width=True):
-                        st.session_state.seleccion = {"modulo": num_modulo, "casillero": num_casillero}
-                
+                    # Verificamos si es el seleccionado
+                    es_el_seleccionado = False
+                    if 'seleccion' in st.session_state and st.session_state.seleccion:
+                        if st.session_state.seleccion['modulo'] == num_modulo and \
+                           st.session_state.seleccion['casillero'] == num_casillero:
+                            es_el_seleccionado = True
+
+                    # Etiqueta dinámica (salto de línea si está seleccionado)
+                    if es_el_seleccionado and ocupado:
+                        label = f"{num_casillero}\n{nombre}"
+                    else:
+                        label = f"{num_casillero}" + (" 👤" if ocupado else "")
+                    
+                    # Creación del botón
+                    if st.button(label, key=f"btn_{num_modulo}_{num_casillero}", use_container_width=True):
+                        # Guardamos en memoria qué botón se tocó y recargamos
+                        st.session_state.seleccion = {
+                            "modulo": num_modulo,
+                            "casillero": num_casillero
+                        }
+# 8. Mostrar la Información del Casillero Seleccionado (Tarjeta Inferior)                       
 st.divider()
 
-# --- MOSTRAR LA INFORMACIÓN DEL CASILLERO SELECCIONADO ---
-if st.session_state.seleccion:
+if 'seleccion' in st.session_state and st.session_state.seleccion:
     mod = st.session_state.seleccion["modulo"]
-    casillero = st.session_state.seleccion["casillero"]
+    cas = st.session_state.seleccion["casillero"]
     
-    # Extraer datos actualizados
+    # Buscar datos de la base actual
     datos_cas = st.session_state.df_colaboradores[
         (st.session_state.df_colaboradores['Modulo'] == mod) & 
-        (st.session_state.df_colaboradores['Casillero'] == casillero)
+        (st.session_state.df_colaboradores['Casillero'] == cas)
     ].iloc[0]
     
-    st.subheader(f"Información: Módulo {mod} - Casillero {casillero}")
-    
-    estado = "Ocupado" if datos_cas["Nombre"] != "Vacío" else "Disponible"
-    
-    st.markdown(f"""
-    <div class="info-card">
-        <p class="info-name">{datos_cas["Nombre"]}</p>
-        <p><strong>Área asignada:</strong> {datos_cas["Area"]}</p>
-        <p><strong>Estado:</strong> {estado}</p>
-    </div>
-    """, unsafe_allow_html=True)
+    if datos_cas["Nombre"] != "Vacío":
+        st.markdown(f"""
+            <div class="info-card">
+                <h3 class="info-name" style="margin: 0; padding-bottom: 10px;">👤 {datos_cas["Nombre"]}</h3>
+                <p style="margin: 5px 0;"><b>Módulo:</b> {mod} | <b>Casillero:</b> {cas}</p>
+                <p style="margin: 5px 0; color: #FFD200;"><b>Área asignada:</b> {datos_cas["Area"]}</p>
+                <p style="margin: 5px 0; color: #4CAF50;"><b>Estado:</b> Ocupado</p>
+            </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.info(f"El Casillero {cas} del Módulo {mod} se encuentra actualmente Vacío y disponible.")
 else:
-    st.info("Selecciona un casillero en la cuadrícula superior.")
+    st.info("Selecciona un casillero en la cuadrícula superior para ver los detalles.")
