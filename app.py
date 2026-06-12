@@ -136,7 +136,7 @@ with st.sidebar:
     
     nuevo_nombre = st.text_input("Nombre del Colaborador:")
     # Reemplazamos el selectbox por botones de selección
-    nueva_area = st.radio("Área:", lista_areas)
+    nueva_area = st.selectbox("Área:", lista_areas)
 
     # Creamos dos columnas para alinear los botones
     col_btn1, col_btn2 = st.columns(2)
