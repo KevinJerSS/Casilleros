@@ -128,7 +128,6 @@ lista_areas = [
 # --- PANEL DE ADMINISTRACIÓN (BARRA LATERAL) ---
 with st.sidebar:
     st.markdown('<h2 style="color:#FFD200;">⚙️ Administrar Casilleros</h2>', unsafe_allow_html=True)
-    st.write("Agrega, edita o elimina la información de un colaborador aquí:")
     
     # Usamos un contenedor más compacto
     with st.container():
