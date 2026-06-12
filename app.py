@@ -173,20 +173,19 @@ with st.sidebar:
     # ... (tu código previo de selección de módulo/casillero) ...
     
         st.divider()
-        st.markdown("### 📥 Descargar Reporte")
+        st.markdown("### 📥 Descargar Reporte General")
         
-        # Filtramos los datos del módulo seleccionado
-        datos_modulo = st.session_state.df_colaboradores[
-            st.session_state.df_colaboradores['Modulo'] == mod_edit
-        ]
+        # 1. Obtenemos el DataFrame completo sin filtrar
+        datos_completos = st.session_state.df_colaboradores
         
-        # Convertimos a CSV para descarga
-        csv = datos_modulo.to_csv(index=False).encode('utf-8-sig')
+        # 2. Convertimos todo el DataFrame a CSV
+        csv_completo = datos_completos.to_csv(index=False).encode('utf-8-sig')
         
+        # 3. Botón de descarga para todos los módulos
         st.download_button(
-            label=f"Descargar {mod_edit}",
-            data=csv,
-            file_name=f"Reporte_Modulo_{mod_edit}.csv",
+            label="Descargar",
+            data=csv_completo,
+            file_name="Reporte_General_Casilleros.csv",
             mime="text/csv",
             use_container_width=True
         )
