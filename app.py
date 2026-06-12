@@ -128,13 +128,16 @@ lista_areas = [
 # --- PANEL DE ADMINISTRACIÓN (BARRA LATERAL) ---
 with st.sidebar:
     st.markdown('<h2 style="color:#FFD200;">⚙️ Administrar Casilleros</h2>', unsafe_allow_html=True)
-    st.write("Agrega, edita o elimina la información de un colaborador aquí:")
+    st.write("Agrega o edita la información de un colaborador aquí:")
     
     mod_edit = st.selectbox("Módulo:", options=list(range(1, 9)))
     cas_edit = st.selectbox("Casillero:", options=list(range(1, 13)))
     
     nuevo_nombre = st.text_input("Nombre del Colaborador:")
     nueva_area = st.selectbox("Área:", lista_areas)
+
+    # Creamos dos columnas para alinear los botones
+    col_btn1, col_btn2 = st.columns(2)
     
     with col_btn1:
         if st.button("Guardar", use_container_width=True):
