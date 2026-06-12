@@ -230,7 +230,7 @@ for i, tab in enumerate(pestanas):
 
                     # Etiqueta dinámica (salto de línea si está seleccionado)
                     if es_el_seleccionado and ocupado:
-                        label = f"{num_casillero}\n{nombre}"
+                        label = f"{num_casillero}-👤{nombre}"
                     else:
                         label = f"{num_casillero}" + (" 👤" if ocupado else "")
                     
