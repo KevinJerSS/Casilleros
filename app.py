@@ -122,7 +122,7 @@ if 'seleccion' not in st.session_state:
 lista_areas = [
     "Abarrotes", "Bazar", "Electro", "Frutas y verduras", 
     "Embutidos", "Carnes", "Pollo brasa", "Confiteria", 
-    "Cajas", "Promociones", "Panaderia", "Sin asignar"
+    "Cajas", "Promociones", "Panaderia", "Almacén", "Sin asignar"
 ]
 
 # --- PANEL DE ADMINISTRACIÓN (BARRA LATERAL) ---
@@ -168,6 +168,28 @@ with st.sidebar:
             # 2. Guarda en el CSV físico
             st.session_state.df_colaboradores.to_csv(ARCHIVO_DATOS, index=False)
             st.warning(f"¡Vaciado!")
+            
+    with st.sidebar:
+    # ... (tu código previo de selección de módulo/casillero) ...
+    
+        st.divider()
+        st.markdown("### 📥 Descargar Reporte")
+        
+        # Filtramos los datos del módulo seleccionado
+        datos_modulo = st.session_state.df_colaboradores[
+            st.session_state.df_colaboradores['Modulo'] == mod_edit
+        ]
+        
+        # Convertimos a CSV para descarga
+        csv = datos_modulo.to_csv(index=False).encode('utf-8-sig')
+        
+        st.download_button(
+            label=f"Descargar Módulo {mod_edit}",
+            data=csv,
+            file_name=f"Reporte_Modulo_{mod_edit}.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
 
 # --- INTERFAZ PRINCIPAL ---
 st.markdown('<h1 class="metro-title">Tienda Metro Emancipación</h1>', unsafe_allow_html=True)
