@@ -131,8 +131,8 @@ with st.sidebar:
     st.write("Agrega o edita la información de un colaborador aquí:")
     
     # Reemplazamos los selectbox por sliders (deslizadores táctiles)
-    mod_edit = st.slider("Módulo:", min_value=1, max_value=8, value=1)
-    cas_edit = st.slider("Casillero:", min_value=1, max_value=12, value=1)
+    mod_edit = st.selectbox("Módulo:", options=list(range(1, 9)))
+    cas_edit = st.selectbox("Casillero:", options=list(range(1, 13)))
     
     nuevo_nombre = st.text_input("Nombre del Colaborador:")
     # Reemplazamos el selectbox por botones de selección
