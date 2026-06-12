@@ -130,14 +130,22 @@ with st.sidebar:
     st.markdown('<h2 style="color:#FFD200;">⚙️ Administrar Casilleros</h2>', unsafe_allow_html=True)
     st.write("Agrega, edita o elimina la información de un colaborador aquí:")
     
-    mod_edit = st.selectbox("Módulo:", options=list(range(1, 9)))
-    cas_edit = st.selectbox("Casillero:", options=list(range(1, 13)))
+    # Usamos un contenedor más compacto
+    with st.container():
+        # En lugar de selectbox, si la lista es corta, a veces el radio es menos invasivo,
+        # pero para mantener tu lógica, asegúrate de que el selectbox no sea el primer elemento
+        # o que esté agrupado.
+        mod_edit = st.selectbox("Módulo:", options=list(range(1, 9)), key="mod_sel")
+        cas_edit = st.selectbox("Casillero:", options=list(range(1, 13)), key="cas_sel")
     
+    # Agregamos un pequeño espacio antes del teclado
+    st.write("---")
+    
+    # Campo de texto (aquí es donde el teclado se activa siempre)
     nuevo_nombre = st.text_input("Nombre del Colaborador:")
-    nueva_area = st.selectbox("Área:", lista_areas)
     
-    # Creamos dos columnas para alinear los botones
-    col_btn1, col_btn2 = st.columns(2)
+    # Área (otra lista, tratemos de reducir el impacto)
+    nueva_area = st.selectbox("Área:", lista_areas, key="area_sel")
     
     with col_btn1:
         if st.button("Guardar", use_container_width=True):
